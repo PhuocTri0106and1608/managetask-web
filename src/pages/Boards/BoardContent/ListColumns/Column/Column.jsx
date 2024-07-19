@@ -20,11 +20,10 @@ import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import CloseIcon from '@mui/icons-material/Close'
 import ListCards from './ListCards/ListCards'
-import { mapOrder } from '~/utils/sorts'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 
-function Column({ column }) {
+function Column({ column, createNewCard }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column._id,
     data: { ...column }
@@ -45,7 +44,7 @@ function Column({ column }) {
   const handleClose = () => {
     setAnchorEl(null)
   }
-  const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
+  const orderedCards = column.cards
   const [openNewCardForm, setOpenNewCardForm] = useState(false)
   const toggleOpenNewCardForm = () => setOpenNewCardForm(!openNewCardForm)
   const [newCardTitle, setNewCardTitle] = useState('')
@@ -54,6 +53,12 @@ function Column({ column }) {
       toast.error('Please enter Card title!', { position: 'bottom-right' })
       return
     }
+    const newCardData = {
+      title: newCardTitle,
+      columnId: column._id
+    }
+
+    createNewCard(newCardData)
     toggleOpenNewCardForm()
     setNewCardTitle('')
   }
@@ -135,7 +140,7 @@ function Column({ column }) {
           </Box>
         </Box>
         {/* List Card */}
-        <ListCards cards={orderedCards}/>
+        <ListCards cards={orderedCards} />
         {/* Box Column Footer */}
         <Box sx={{
           height: (theme) => theme.webCustom.columnFooterHeight,
@@ -186,10 +191,10 @@ function Column({ column }) {
                 }}
               />
               <Box
-                onClick={addNewCard}
                 sx={{ display:'flex', alignItems:'center', gap:1 }}
               >
                 <Button
+                  onClick={addNewCard}
                   variant='contained' color='success' size='small' data-no-dnd='true'
                   sx={{
                     boxShadow:'none',
