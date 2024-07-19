@@ -8,7 +8,7 @@ import TextField from '@mui/material/TextField'
 import CloseIcon from '@mui/icons-material/Close'
 import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable'
 
-function ListColumns({ columns, createNewColumn, createNewCard }) {
+function ListColumns({ columns, createNewColumn, createNewCard, deleteColumnDetails }) {
   const [openNewColumnForm, setOpenNewColumnForm] = useState(false)
   const toggleOpenNewColumnForm = () => setOpenNewColumnForm(!openNewColumnForm)
   const [newColumnTitle, setNewColumnTitle] = useState('')
@@ -40,7 +40,7 @@ function ListColumns({ columns, createNewColumn, createNewCard }) {
         '&::-webkit-scrollbar-track': { m:2 }
       }}>
         {/* Box Column */}
-        {columns?.map(column => <Column key={column._id} column={column} createNewCard={createNewCard}/>)}
+        {columns?.map(column => <Column key={column._id} column={column} createNewCard={createNewCard} deleteColumnDetails={deleteColumnDetails}/>)}
         {/* Box Add new column */}
         {!openNewColumnForm
           ? <Box

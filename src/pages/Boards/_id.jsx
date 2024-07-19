@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 import Container from '@mui/material/Container'
 import AppBar from '~/components/AppBar/AppBar'
 import BoardBar from './BoardBar/BoardBar'
@@ -6,6 +7,7 @@ import BoardContent from './BoardContent/BoardContent'
 import {
   createNewCardAPI,
   createNewColumnAPI,
+  deleteColumnDetailsAPI,
   fetchBoardDetailsAPI,
   moveCardToDifferentColumnAPI,
   updateBoardDetailsAPI,
@@ -114,6 +116,16 @@ function Board() {
       nextCardOrderIds: dndOrderedColumns.find(c => c._id === nextColumnId)?.cardOrderIds
     })
   }
+  const deleteColumnDetails = (columnId) => {
+    const newBoard = { ...board }
+    newBoard.columns = newBoard.columns.filter(column => column._id !== columnId)
+    newBoard.columnOrderIds = newBoard.columnOrderIds.filter(_id => _id !== columnId)
+    setBoard(newBoard)
+
+    deleteColumnDetailsAPI(columnId).then(res => {
+      toast.success(res?.deleteResult)
+    })
+  }
   if (!board) {
     return (
       <Box sx={{
@@ -135,11 +147,13 @@ function Board() {
       <BoardBar board={board}/>
       <BoardContent
         board={board}
+
         createNewColumn={createNewColumn}
         createNewCard={createNewCard}
         moveColumns={moveColumns}
         moveCardInTheSameColumn={moveCardInTheSameColumn}
         moveCardToDifferentColumn={moveCardToDifferentColumn}
+        deleteColumnDetails={deleteColumnDetails}
       />
     </Container>
   )

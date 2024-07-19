@@ -30,7 +30,8 @@ function BoardContent({
   createNewCard,
   moveColumns,
   moveCardInTheSameColumn,
-  moveCardToDifferentColumn
+  moveCardToDifferentColumn,
+  deleteColumnDetails
 }) {
   //Yêu cầu chuột di chuyển 10px thì mới kích hoạt event
   const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })
@@ -260,7 +261,7 @@ function BoardContent({
         height: (theme) => theme.webCustom.boardContentHeight,
         p:'10px 0'
       }}>
-        <ListColumns columns={orderedColumns} createNewColumn={createNewColumn} createNewCard={createNewCard}/>
+        <ListColumns columns={orderedColumns} createNewColumn={createNewColumn} createNewCard={createNewCard} deleteColumnDetails={deleteColumnDetails}/>
         <DragOverlay dropAnimation={dropAnimation}>
           {!activeDragItemType && null}
           {(activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) && <Column column={activeDragItemData}/>}
